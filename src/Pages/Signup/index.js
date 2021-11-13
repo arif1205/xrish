@@ -8,9 +8,10 @@ import { Link } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
 import useScrollTop from "../../Hooks/useScrollTop";
 import { useHistory, useLocation } from "react-router-dom";
+import Alerts from "../../Common/Alert";
 
 const Signup = () => {
-	const { userInfo, setUserInfo, register, isLoggedin } = useAuth();
+	const { userInfo, setUserInfo, register, isLoggedin, error } = useAuth();
 	const history = useHistory();
 	const location = useLocation();
 
@@ -80,6 +81,7 @@ const Signup = () => {
 				</Form>
 			</SectionWrapper>
 			<Footer />
+			{error && <Alerts text={error} severity='error' />}
 		</>
 	);
 };

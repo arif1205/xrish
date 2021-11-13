@@ -5,7 +5,7 @@ import IconButton from "@mui/material/IconButton";
 import Collapse from "@mui/material/Collapse";
 import { AlertWrapper } from "./Alerts.styles";
 
-const Alerts = ({ text }) => {
+const Alerts = ({ text, severity }) => {
 	const [open, setOpen] = useState(true);
 
 	useEffect(() => {
@@ -18,6 +18,7 @@ const Alerts = ({ text }) => {
 		<Box sx={{ width: "30%" }} component={AlertWrapper}>
 			<Collapse in={open}>
 				<Alert
+					severity={severity || "success"}
 					action={
 						<IconButton
 							aria-label='close'
