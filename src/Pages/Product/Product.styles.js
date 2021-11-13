@@ -36,6 +36,16 @@ export const Flex = styled.div`
 			color: #444 !important;
 		}
 	}
+
+	@media screen and (max-width: 767px) {
+		flex-direction: column;
+
+		.product-img,
+		.product-details {
+			width: 95%;
+			gap: 30px;
+		}
+	}
 `;
 
 export const Form = styled.form`

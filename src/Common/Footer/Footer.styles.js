@@ -21,4 +21,9 @@ export const Flex = styled.div`
 	p {
 		color: #777;
 	}
+
+	@media screen and (max-width: 575px) {
+		flex-direction: column;
+		gap: 20px;
+	}
 `;

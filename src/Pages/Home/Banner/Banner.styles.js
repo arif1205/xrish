@@ -19,4 +19,22 @@ export const BannerText = styled.div`
 	h1 {
 		margin: 5px 0;
 	}
+
+	@media screen and (max-width: 767px) {
+		bottom: 100px;
+		left: 100px;
+		padding-right: 40px;
+
+		h1 {
+			font-size: 38px !important;
+		}
+	}
+	@media screen and (max-width: 575px) {
+		bottom: 80px;
+		left: 40px;
+
+		h1 {
+			font-size: 38px !important;
+		}
+	}
 `;

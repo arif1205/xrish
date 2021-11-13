@@ -40,6 +40,7 @@ export const GlobalStyle = createGlobalStyle`
 
   .d-flex {
     display: flex;
+    flex-wrap: wrap;
   }
 
   .f-gap-10 {
@@ -95,4 +96,12 @@ export const Grid = styled.div`
 	grid-template-columns: repeat(3, 1fr);
 	justify-content: center;
 	grid-gap: 40px 80px;
+
+	@media screen and (max-width: 767px) {
+		grid-template-columns: repeat(2, 1fr);
+	}
+
+	@media screen and (max-width: 575px) {
+		grid-template-columns: repeat(1, 1fr);
+	}
 `;

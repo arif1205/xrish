@@ -18,5 +18,9 @@ export const Wrapper = styled.div`
 		a {
 			color: #fff !important;
 		}
+
+		@media screen and (max-width: 767px) {
+			top: 60%;
+		}
 	}
 `;

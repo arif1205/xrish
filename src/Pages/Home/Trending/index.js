@@ -18,7 +18,7 @@ const Trending = () => {
 			.catch((err) => {
 				console.log(err);
 			});
-	});
+	}, []);
 
 	return (
 		<SectionWrapper>

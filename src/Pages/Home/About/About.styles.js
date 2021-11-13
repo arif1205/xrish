@@ -20,4 +20,13 @@ export const Flex = styled.div`
 		font-weight: normal !important;
 		color: #666 !important;
 	}
+
+	@media screen and (max-width: 767px) {
+		flex-direction: column;
+
+		.text,
+		.img {
+			max-width: 100%;
+		}
+	}
 `;

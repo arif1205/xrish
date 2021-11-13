@@ -18,7 +18,7 @@ const Reviews = () => {
 			.catch((err) => {
 				console.log(err);
 			});
-	});
+	}, []);
 
 	return (
 		<Wrapper bg={bg}>

@@ -38,6 +38,11 @@ export const Menu = styled.div`
 			margin-bottom: 0;
 		}
 	}
+
+	@media screen and (max-width: 700px) {
+		flex-direction: column;
+		gap: 15px;
+	}
 `;
 
 export const Container = styled.nav`
