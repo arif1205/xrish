@@ -10,6 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
+import Alerts from "../../../Common/Alert";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
 	[`&.${tableCellClasses.head}`]: {
@@ -32,6 +33,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const ManageAllOrders = () => {
+	const [alert, setAlert] = useState(false);
 	const [orders, setOrders] = useState([]);
 
 	useEffect(() => {
@@ -46,24 +48,38 @@ const ManageAllOrders = () => {
 	}, []);
 
 	const removeOrder = (id) => {
-		axios
-			.delete(`https://salty-chamber-27188.herokuapp.com/orders?id=${id}`)
-			.then((res) => {
-				setOrders(orders.filter((order) => order._id !== id));
-			})
-			.catch((err) => console.log(err));
+		if (window.confirm("Sure to remove clients order?")) {
+			axios
+				.delete(`https://salty-chamber-27188.herokuapp.com/orders?id=${id}`)
+				.then((res) => {
+					if (res.data.deletedCount) {
+						setAlert(true);
+						setOrders(orders.filter((order) => order._id !== id));
+						setTimeout(() => {
+							setAlert(false);
+						}, 3000);
+					}
+				})
+				.catch((err) => console.log(err));
+		}
 	};
 
 	const changeStatus = (id) => {
 		axios
 			.put(`https://salty-chamber-27188.herokuapp.com/orders?id=${id}`)
 			.then((res) => {
-				setOrders((prevOrders) =>
-					prevOrders.filter((order) => {
-						order.status = order._id === id ? "Shipped" : order.status;
-						return order;
-					})
-				);
+				if (res.data.modifiedCount) {
+					setAlert(true);
+					setTimeout(() => {
+						setAlert(false);
+					}, 3000);
+					setOrders((prevOrders) =>
+						prevOrders.filter((order) => {
+							order.status = order._id === id ? "Shipped" : order.status;
+							return order;
+						})
+					);
+				}
 			})
 			.catch((err) => console.log(err));
 	};
@@ -114,6 +130,7 @@ const ManageAllOrders = () => {
 					</TableBody>
 				</Table>
 			</TableContainer>
+			{alert && <Alerts text='Successfull' />}
 		</Wrapper>
 	);
 };

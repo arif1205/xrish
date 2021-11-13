@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import initializeAuthentication from "../Firebase/firebase.init";
+import axios from "axios";
 
 import {
 	getAuth,
@@ -16,21 +17,13 @@ const useFirebase = () => {
 	const [user, setUser] = useState({});
 	const [isLoggedin, setIsLoggedin] = useState(false);
 	const [error, setError] = useState("");
-	// const [email, setEmail] = useState("");
-	// const [password, setPassword] = useState("");
-	// const [name, setName] = useState("");
 	const [userInfo, setUserInfo] = useState({
 		name: "",
 		email: "",
 		password: "",
-		role: "",
 	});
 
 	const auth = getAuth();
-
-	const setRole = (email) => {
-		return email === "admin@admin.com" ? "admin" : "customer";
-	};
 
 	useEffect(() => {
 		onAuthStateChanged(auth, (result) => {
@@ -40,7 +33,6 @@ const useFirebase = () => {
 					name: result.displayName,
 					id: uid,
 					email: result.email,
-					role: setRole(result.email),
 				});
 				setIsLoggedin(true);
 			} else {
@@ -60,39 +52,36 @@ const useFirebase = () => {
 					name: auth.currentUser?.displayName,
 					id: auth.currentUser?.uid,
 					email: auth.currentUser?.email,
-					role: "customer",
 				});
 			})
 			.catch((error) => {});
 	};
 
-	// update role
-	const makeAdmin = () => {
-		updateProfile(auth.currentUser, {
-			email: auth.currentUser.email,
-		})
-			.then(() => {
-				setUser({
-					name: auth.currentUser?.displayName,
-					id: auth.currentUser?.uid,
-					email: auth.currentUser?.email,
-					role: "admin",
-				});
+	// post to database
+	const postToDatabase = (data) => {
+		axios
+			.post("https://salty-chamber-27188.herokuapp.com/users", data)
+			.then((res) => {
+				console.log(res);
 			})
-			.catch((error) => {});
+			.catch((e) => {
+				console.log(e);
+			});
 	};
 
 	const register = () => {
 		createUserWithEmailAndPassword(auth, userInfo.email, userInfo.password)
 			.then((userCredential) => {
 				const user = userCredential.user;
-				console.log(user);
 				addName();
 				setUser({
 					name: user?.displayName,
 					id: user?.uid,
 					email: user?.email,
-					role: setRole(user?.email),
+				});
+				postToDatabase({
+					id: user?.uid,
+					email: user?.email,
 				});
 				setIsLoggedin(true);
 				setError("");
@@ -100,7 +89,6 @@ const useFirebase = () => {
 					name: "",
 					email: "",
 					password: "",
-					role: "",
 				});
 			})
 			.catch((error) => {
@@ -109,9 +97,6 @@ const useFirebase = () => {
 				setUser({});
 				setIsLoggedin(false);
 			});
-		// .finally(() => {
-		// 	window.location.reload();
-		// });
 	};
 
 	const login = () => {
@@ -122,7 +107,6 @@ const useFirebase = () => {
 					name: user?.displayName,
 					id: user.uid,
 					email: user.email,
-					role: setRole(user.email),
 				});
 				setIsLoggedin(true);
 				setError("");
@@ -130,7 +114,6 @@ const useFirebase = () => {
 					name: "",
 					email: "",
 					password: "",
-					role: "",
 				});
 			})
 			.catch((error) => {
@@ -149,7 +132,6 @@ const useFirebase = () => {
 				name: "",
 				email: "",
 				password: "",
-				role: "",
 			});
 		});
 	};
@@ -162,7 +144,7 @@ const useFirebase = () => {
 		logout,
 		userInfo,
 		setUserInfo,
-		makeAdmin,
+
 		isLoggedin,
 	};
 };

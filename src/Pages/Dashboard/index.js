@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -13,6 +13,7 @@ import { IconButton } from "@mui/material";
 import { Link, useRouteMatch, Switch, Route } from "react-router-dom";
 import useAuth from "../../Hooks/useAuth";
 import Topic from "./Topic";
+import axios from "axios";
 
 const drawerWidth = 240;
 
@@ -21,16 +22,28 @@ const Dashboard = (props) => {
 	const [mobileOpen, setMobileOpen] = useState(false);
 	const { logout, user } = useAuth();
 	let { path, url } = useRouteMatch();
+	const [role, setRole] = useState("customer");
 
 	const handleDrawerToggle = () => {
 		setMobileOpen(!mobileOpen);
 	};
 
+	useEffect(() => {
+		axios
+			.get(
+				`https://salty-chamber-27188.herokuapp.com/users?email=${user.email}`
+			)
+			.then((res) => {
+				setRole(res.data[0].role);
+			})
+			.catch((e) => console.log(e));
+	}, [user.email]);
+
 	const drawer = (
 		<div>
 			<Toolbar />
 			<Divider />
-			{user.role === "customer" && (
+			{role === "customer" && (
 				<List>
 					<ListItem button component={Link} to={`${url}/pay`}>
 						<ListItemText primary={"Pay"} />
@@ -49,7 +62,7 @@ const Dashboard = (props) => {
 					</ListItem>
 				</List>
 			)}
-			{user.role === "admin" && (
+			{role === "admin" && (
 				<List>
 					<ListItem button component={Link} to={`${url}/manageallorders`}>
 						<ListItemText primary={"Manage all Orders"} />

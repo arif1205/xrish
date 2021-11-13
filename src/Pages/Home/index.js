@@ -5,6 +5,7 @@ import Banner from "./Banner";
 import Reviews from "./Reviews";
 import Trending from "./Trending";
 import Footer from "../../Common/Footer";
+// hooks
 import useScrollTop from "../../Hooks/useScrollTop";
 
 const Home = () => {

@@ -9,6 +9,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import Alerts from "../../../Common/Alert";
 import axios from "axios";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -32,6 +33,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const ManageProduct = () => {
+	const [alert, setAlert] = useState(false);
 	const [products, setProducts] = useState([]);
 
 	useEffect(() => {
@@ -46,12 +48,20 @@ const ManageProduct = () => {
 	}, []);
 
 	const removeProducts = (id) => {
-		axios
-			.delete(`https://salty-chamber-27188.herokuapp.com/products?id=${id}`)
-			.then((res) => {
-				setProducts(products.filter((order) => order._id !== id));
-			})
-			.catch((err) => console.log(err));
+		if (window.confirm("Delete product from database?")) {
+			axios
+				.delete(`https://salty-chamber-27188.herokuapp.com/products?id=${id}`)
+				.then((res) => {
+					if (res.data.deletedCount) {
+						setAlert(true);
+						setTimeout(() => {
+							setAlert(false);
+						}, 3000);
+						setProducts(products.filter((order) => order._id !== id));
+					}
+				})
+				.catch((err) => console.log(err));
+		}
 	};
 
 	return (
@@ -89,6 +99,7 @@ const ManageProduct = () => {
 					</TableBody>
 				</Table>
 			</TableContainer>
+			{alert && <Alerts text='Product Deleted Successfully' />}
 		</Wrapper>
 	);
 };

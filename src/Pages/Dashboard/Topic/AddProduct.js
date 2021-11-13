@@ -2,8 +2,10 @@ import { Typography, TextField, Button } from "@mui/material";
 import React, { useState } from "react";
 import { Wrapper, Form } from "./Topic.styles";
 import axios from "axios";
+import Alerts from "../../../Common/Alert";
 
 const AddProduct = () => {
+	const [alert, setAlert] = useState(false);
 	const [productInfo, setProductInfo] = useState({
 		img: "",
 		brand: "",
@@ -26,7 +28,22 @@ const AddProduct = () => {
 
 		axios
 			.post("https://salty-chamber-27188.herokuapp.com/products", cloneInfo)
-			.then((res) => console.log(res))
+			.then((res) => {
+				if (res.data.insertedId) {
+					setAlert(true);
+					setProductInfo({
+						img: "",
+						brand: "",
+						model: "",
+						des: "",
+						price: "",
+						year: "",
+					});
+					setTimeout(() => {
+						setAlert(false);
+					}, 3000);
+				}
+			})
 			.catch((e) => console.log(e));
 	};
 
@@ -42,7 +59,8 @@ const AddProduct = () => {
 					size='small'
 					name='brand'
 					required
-					onBlur={handleChange}
+					value={productInfo.brand}
+					onChange={handleChange}
 				/>
 				<TextField
 					label='Model'
@@ -50,45 +68,51 @@ const AddProduct = () => {
 					size='small'
 					name='model'
 					required
-					onBlur={handleChange}
+					value={productInfo.model}
+					onChange={handleChange}
 				/>
 				<TextField
 					required
+					value={productInfo.des}
 					id='outlined-multiline-static'
 					label='Description'
 					multiline
 					name='des'
-					onBlur={handleChange}
+					onChange={handleChange}
 				/>
 				<TextField
 					required
+					value={productInfo.img}
 					id='outlined-multiline-static'
 					label='Img URL'
 					multiline
 					name='img'
-					onBlur={handleChange}
+					onChange={handleChange}
 				/>
 				<TextField
 					required
+					value={productInfo.price}
 					label='Price'
 					id='outlined-size-small'
 					size='small'
 					name='price'
-					onBlur={handleChange}
+					onChange={handleChange}
 				/>
 				<TextField
 					required
+					value={productInfo.year}
 					label='Launching Year'
 					id='outlined-size-small'
 					size='small'
 					name='year'
-					onBlur={handleChange}
+					onChange={handleChange}
 				/>
 
 				<Button variant='contained' type='submit'>
 					Add a New Products
 				</Button>
 			</Form>
+			{alert && <Alerts text='Product added Successfully' />}
 		</Wrapper>
 	);
 };

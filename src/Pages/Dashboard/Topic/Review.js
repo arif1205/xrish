@@ -3,8 +3,10 @@ import React, { useState } from "react";
 import { Wrapper, Form } from "./Topic.styles";
 import useAuth from "../../../Hooks/useAuth";
 import axios from "axios";
+import Alerts from "../../../Common/Alert";
 
 const Review = () => {
+	const [alert, setAlert] = useState(false);
 	const { user } = useAuth();
 	const [userReview, setUserReview] = useState({
 		name: "",
@@ -30,7 +32,21 @@ const Review = () => {
 
 		axios
 			.post("https://salty-chamber-27188.herokuapp.com/reviews", newReview)
-			.then((res) => console.log(res))
+			.then((res) => {
+				if (res.data.insertedId) {
+					setAlert(true);
+					setUserReview({
+						name: "",
+						email: "",
+						des: "",
+						title: "",
+						rating: "",
+					});
+					setTimeout(() => {
+						setAlert(false);
+					}, 3000);
+				}
+			})
 			.catch((e) => console.log(e));
 	};
 
@@ -66,7 +82,8 @@ const Review = () => {
 					label='Review Title'
 					multiline
 					name='title'
-					onBlur={handleChange}
+					value={userReview.title}
+					onChange={handleChange}
 				/>
 				<TextField
 					required
@@ -74,7 +91,8 @@ const Review = () => {
 					label='Your review'
 					multiline
 					name='des'
-					onBlur={handleChange}
+					value={userReview.des}
+					onChange={handleChange}
 				/>
 				<TextField
 					required
@@ -82,13 +100,15 @@ const Review = () => {
 					id='outlined-size-small'
 					size='small'
 					name='rating'
-					onBlur={handleChange}
+					value={userReview.rating}
+					onChange={handleChange}
 				/>
 
 				<Button variant='contained' type='submit'>
 					Submit Review
 				</Button>
 			</Form>
+			{alert && <Alerts text='Review placed Successfully' />}
 		</Wrapper>
 	);
 };

@@ -11,6 +11,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import axios from "axios";
 import useAuth from "../../../Hooks/useAuth";
+import Alerts from "../../../Common/Alert";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
 	[`&.${tableCellClasses.head}`]: {
@@ -34,6 +35,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const Myorders = () => {
 	const [orders, setOrders] = useState([]);
+	const [alert, setAlert] = useState(false);
 	const { user } = useAuth();
 
 	useEffect(() => {
@@ -50,12 +52,20 @@ const Myorders = () => {
 	}, [user]);
 
 	const removeOrder = (id) => {
-		axios
-			.delete(`https://salty-chamber-27188.herokuapp.com/orders?id=${id}`)
-			.then((res) => {
-				setOrders(orders.filter((order) => order._id !== id));
-			})
-			.catch((err) => console.log(err));
+		if (window.confirm("Are you to remove your order permanently?")) {
+			axios
+				.delete(`https://salty-chamber-27188.herokuapp.com/orders?id=${id}`)
+				.then((res) => {
+					if (res.data.deletedCount) {
+						setAlert(true);
+						setOrders(orders.filter((order) => order._id !== id));
+						setTimeout(() => {
+							setAlert(false);
+						}, 3000);
+					}
+				})
+				.catch((err) => console.log(err));
+		}
 	};
 
 	return (
@@ -99,6 +109,7 @@ const Myorders = () => {
 					</TableBody>
 				</Table>
 			</TableContainer>
+			{alert && <Alerts text='Ordere Deleted Successfully' />}
 		</Wrapper>
 	);
 };

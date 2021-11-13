@@ -8,11 +8,13 @@ import { Wrapper, Flex, Form } from "./Product.styles";
 import useScrollTop from "../../Hooks/useScrollTop";
 import { Button, TextField, Typography } from "@mui/material";
 import useAuth from "../../Hooks/useAuth";
+import Alerts from "../../Common/Alert";
 
 const Product = () => {
 	const { id } = useParams();
 	const [product, setProduct] = useState({});
 	const { user } = useAuth();
+	const [alert, setAlert] = useState(false);
 	const [orderInfo, setOrderInfo] = useState({
 		name: "",
 		email: "",
@@ -22,6 +24,7 @@ const Product = () => {
 		productId: "",
 		productName: "",
 		productModel: "",
+		status: "",
 	});
 
 	useEffect(() => {
@@ -61,7 +64,22 @@ const Product = () => {
 		axios
 			.post("https://salty-chamber-27188.herokuapp.com/orders", newOrderInfo)
 			.then((res) => {
-				console.log(res);
+				if (res.data.insertedId) {
+					setAlert(true);
+					setOrderInfo({
+						name: "",
+						email: "",
+						price: "",
+						address: "",
+						phone: "",
+						productId: "",
+						productName: "",
+						productModel: "",
+					});
+					setTimeout(() => {
+						setAlert(false);
+					}, 3000);
+				}
 			})
 			.catch((e) => {
 				console.log(e);
@@ -139,7 +157,8 @@ const Product = () => {
 								id='outlined-size-small'
 								size='small'
 								name='address'
-								onBlur={updatePlaceOrderInfo}
+								value={orderInfo.address}
+								onChange={updatePlaceOrderInfo}
 							/>
 							<TextField
 								required
@@ -147,7 +166,8 @@ const Product = () => {
 								id='outlined-size-small'
 								size='small'
 								name='phone'
-								onBlur={updatePlaceOrderInfo}
+								value={orderInfo.phone}
+								onChange={updatePlaceOrderInfo}
 							/>
 							<Button variant='contained' type='submit'>
 								Place order
@@ -157,6 +177,7 @@ const Product = () => {
 				</Flex>
 			</SectionWrapper>
 			<Footer />
+			{alert && <Alerts text='Ordered placed successfully' />}
 		</>
 	);
 };
