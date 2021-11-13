@@ -31,6 +31,13 @@ export const Menu = styled.div`
 			color: #000;
 		}
 	}
+
+	.d-flex {
+		& > * {
+			align-self: center;
+			margin-bottom: 0;
+		}
+	}
 `;
 
 export const Container = styled.nav`
@@ -39,4 +46,5 @@ export const Container = styled.nav`
 	width: 100%;
 	z-index: 9999999;
 	background: #fff;
+	box-shadow: rgba(0, 0, 0, 0.45) 0px 15px 10px -15px;
 `;

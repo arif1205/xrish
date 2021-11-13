@@ -1,25 +1,21 @@
 import React from "react";
 import Navbar from "../../Common/Navbar";
-import About from "./About";
-import Banner from "./Banner";
-import Reviews from "./Reviews";
-import Trending from "./Trending";
 import Footer from "../../Common/Footer";
+import SectionBanner from "../../Common/SectionBanner";
+import Products from "./Products";
 import useScrollTop from "../../Hooks/useScrollTop";
 
-const Home = () => {
+const Explore = () => {
 	useScrollTop();
 
 	return (
 		<>
 			<Navbar />
-			<Banner />
-			<Trending />
-			<Reviews />
-			<About />
+			<SectionBanner title='Shop' />
+			<Products />
 			<Footer />
 		</>
 	);
 };
 
-export default Home;
+export default Explore;

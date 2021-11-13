@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const Item = styled.div`
-	cursor: pointer;
 	font-family: "Jost", sans-serif;
 	transition: all 0.3s;
 
@@ -9,6 +8,11 @@ export const Item = styled.div`
 		text-align: center;
 		background: #fff;
 		color: #000;
+
+		button {
+			cursor: pointer;
+			border: none !important;
+		}
 	}
 
 	div.img {

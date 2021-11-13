@@ -1,8 +1,8 @@
 import React from "react";
 import Typography from "@mui/material/Typography";
-import Button from "@mui/material/Button";
 import { BannerText, Container } from "./Banner.styles";
 import banner from "../../../Images/banner.jpg";
+import Button from "@mui/material/Button";
 import { WhiteButton } from "../../../global.styles";
 
 const Banner = () => {

@@ -89,3 +89,10 @@ export const SectionWrapper = styled.div`
 	width: 95%;
 	margin: auto;
 `;
+
+export const Grid = styled.div`
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	justify-content: center;
+	grid-gap: 40px 80px;
+`;

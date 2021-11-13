@@ -4,6 +4,7 @@ export const Container = styled.header`
 	min-height: 100vh;
 	width: 100%;
 	background: url(${(props) => props.bg});
+	background-position: center center;
 	background-size: cover;
 	position: relative;
 `;
